@@ -1,7 +1,7 @@
 export const instituteAddress =
   "18-1-306, Circle, Bhavani Nagar near the signal, Tirupati - 517501 (Andhra Pradesh) India";
 
-export const institutePhone = "9700212084";
+export const institutePhone = "9700213084";
 export const instituteEmail = "harshavardhanhm104@gmail.com";
 
 export const quickHighlights = [
