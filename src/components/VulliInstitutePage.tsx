@@ -155,53 +155,53 @@ export default function VulliInstitutePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="flex shrink-0 items-center gap-2.5">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-3">
             <img
               src="/favicon.png"
               alt="Vulli Narayana Institute logo"
-              className="h-9 w-9 rounded-xl border border-border object-cover sm:h-11 sm:w-11"
+              className="h-10 w-10 rounded-2xl border border-border object-cover sm:h-12 sm:w-12"
             />
             <div>
-              <p className="text-sm font-black tracking-tight sm:text-base">
+              <p className="text-base font-black tracking-tight sm:text-lg">
                 Vulli Narayana Institute
               </p>
-              <p className="hidden text-xs text-muted-foreground sm:block">
+              <p className="text-xs text-muted-foreground sm:text-sm">
                 Admissions Open for 2026-2027
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <nav className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
-              <a href="#courses" className="whitespace-nowrap rounded-lg px-2.5 py-1.5 hover:bg-slate-100 hover:text-primary">
+          <div className="flex flex-1 flex-col gap-3 lg:items-end">
+            <nav className="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground sm:gap-4">
+              <a href="#courses" className="hover:text-primary">
                 Courses
               </a>
-              <a href="#services" className="whitespace-nowrap rounded-lg px-2.5 py-1.5 hover:bg-slate-100 hover:text-primary">
+              <a href="#services" className="hover:text-primary">
                 Services
               </a>
-              <a href="#admissions" className="whitespace-nowrap rounded-lg px-2.5 py-1.5 hover:bg-slate-100 hover:text-primary">
+              <a href="#admissions" className="hover:text-primary">
                 Admissions
               </a>
-              <a href="#contact" className="whitespace-nowrap rounded-lg px-2.5 py-1.5 hover:bg-slate-100 hover:text-primary">
+              <a href="#contact" className="hover:text-primary">
                 Contact
               </a>
               <button
                 type="button"
                 onClick={() => setIsProfileOpen(true)}
-                className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-left hover:border-primary hover:text-primary"
+                className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-left hover:border-primary hover:text-primary"
               >
                 <img
                   src="/ceo.jpg"
                   alt="CEO of Vulli Narayana Institute"
-                  className="h-7 w-7 rounded-full object-cover"
+                  className="h-8 w-8 rounded-full object-cover"
                 />
                 <span className="hidden sm:inline">Our Profile</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsLocationOpen(true)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-amber-200 bg-amber-50 text-amber-900 transition hover:-translate-y-0.5 hover:border-amber-400"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-200 bg-amber-50 text-amber-900 transition hover:-translate-y-0.5 hover:border-amber-400"
                 aria-label="Open location details"
               >
                 <MapPin className="h-4 w-4" />
@@ -213,34 +213,34 @@ export default function VulliInstitutePage() {
 
       <main>
         <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(254,215,170,0.65),_transparent_35%),linear-gradient(135deg,#fff8ef_0%,#fff_45%,#eef6ff_100%)]">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55 }}
             >
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 sm:mb-5 sm:px-4 sm:py-2 sm:text-sm">
-                <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
+                <Star className="h-4 w-4" />
                 Admissions Open for 2026-2027
               </div>
-              <h1 className="text-2xl font-black leading-tight sm:text-4xl lg:text-6xl">
+              <h1 className="max-w-4xl text-3xl font-black leading-tight sm:text-5xl lg:text-6xl">
                 Personalized coaching for{" "}
                 <span className="text-primary">
                   school, foundation and competitive exams
                 </span>{" "}
                 in Tirupati.
               </h1>
-              <p className="mt-4 text-sm leading-7 text-muted-foreground sm:mt-5 sm:text-base sm:leading-8">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
                 Vulli Narayana Institute supports students from Class 1 to
                 Intermediate with focused guidance for IIT, NEET, EAPCET, Olympiad,
                 Polycet, spoken English and one-to-one teaching.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-3 sm:mt-8 sm:gap-4">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
                 <button
                   type="button"
                   onClick={() => setIsEnrollOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition hover:-translate-y-0.5 sm:px-6 sm:py-3.5 sm:text-base"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition hover:-translate-y-0.5"
                 >
                   Enroll Now
                   <ArrowRight className="h-4 w-4" />
@@ -249,20 +249,20 @@ export default function VulliInstitutePage() {
                   href={whatsappLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-5 py-3 text-sm font-semibold hover:border-primary hover:text-primary sm:px-6 sm:py-3.5 sm:text-base"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-6 py-3.5 text-base font-semibold hover:border-primary hover:text-primary"
                 >
                   <MessageCircle className="h-4 w-4" />
-                  WhatsApp
+                  Message on WhatsApp
                 </a>
               </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3">
+              <div className="mt-10 grid gap-3 sm:grid-cols-3">
                 {quickHighlights.map((item) => (
                   <div
                     key={item}
-                    className="rounded-2xl border border-border bg-card/90 p-3 shadow-sm sm:p-4"
+                    className="rounded-2xl border border-border bg-card/90 p-4 shadow-sm"
                   >
-                    <p className="text-xs font-semibold leading-6 sm:text-sm">{item}</p>
+                    <p className="text-sm font-semibold leading-6">{item}</p>
                   </div>
                 ))}
               </div>
@@ -278,14 +278,14 @@ export default function VulliInstitutePage() {
               <img
                 src="/hero-section.jpg"
                 alt="Students at Vulli Narayana Institute"
-              className="relative h-[220px] w-full rounded-[2rem] border border-white/50 object-cover shadow-2xl shadow-slate-300/50 sm:h-[320px] lg:h-full lg:min-h-[400px]"
+              className="relative h-full min-h-[280px] w-full rounded-[2rem] border border-white/50 object-cover shadow-2xl shadow-slate-300/50 sm:min-h-[360px]"
               />
             </motion.div>
           </div>
         </section>
 
-        <section className="border-y border-border bg-slate-950 py-4 text-white">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 text-center text-xs font-semibold uppercase tracking-[0.15em] sm:px-6 sm:text-sm sm:tracking-[0.2em]">
+        <section className="border-y border-border bg-slate-950 py-5 text-white">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-4 px-4 text-center text-sm font-semibold uppercase tracking-[0.2em] sm:px-6">
             <span>Tirupati</span>
             <span className="text-amber-300">IIT / NEET Foundation</span>
             <span>Regular Tuitions</span>
@@ -294,9 +294,9 @@ export default function VulliInstitutePage() {
           </div>
         </section>
 
-        <section id="courses" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
-          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-8">
-            <div className="space-y-5">
+        <section id="courses" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-8">
+            <div className="space-y-6">
               <SectionTitle
                 eyebrow="Courses Offered"
                 title="Complete academic and competitive coaching under one institute"
@@ -305,18 +305,18 @@ export default function VulliInstitutePage() {
               <img
                 src="/course.jpg"
                 alt="Courses offered at Vulli Narayana Institute"
-                className="h-[200px] w-full rounded-[2rem] object-cover shadow-xl shadow-slate-200 sm:h-[280px] lg:h-[380px]"
+                className="h-[260px] w-full rounded-[2rem] object-cover shadow-xl shadow-slate-200 sm:h-[320px] lg:h-[420px]"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 sm:gap-5">
               {courseGroups.map((group) => (
                 <article
                   key={group.title}
-                  className="rounded-[1.25rem] border border-border bg-card p-3 shadow-sm sm:rounded-[1.75rem] sm:p-5"
+                  className="rounded-[1.5rem] border border-border bg-card p-4 shadow-sm sm:rounded-[1.75rem] sm:p-6"
                 >
-                  <h3 className="text-sm font-bold text-primary sm:text-base lg:text-lg">{group.title}</h3>
-                  <ul className="mt-3 space-y-2 text-xs leading-6 text-muted-foreground sm:text-sm">
+                  <h3 className="text-lg font-bold text-primary">{group.title}</h3>
+                  <ul className="mt-4 space-y-3 text-sm leading-6 text-muted-foreground">
                     {group.items.map((item) => (
                       <li key={item} className="flex gap-2">
                         <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
@@ -329,19 +329,19 @@ export default function VulliInstitutePage() {
             </div>
           </div>
 
-          <div className="mt-10 sm:mt-14">
-            <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
+          <div className="mt-14">
+            <div className="mb-8 flex items-end justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">
                   Course Details
                 </p>
-                <h3 className="mt-2 text-xl font-black sm:text-2xl sm:text-3xl">
+                <h3 className="mt-3 text-2xl font-black sm:text-3xl">
                   Click a course icon to view structure and syllabus
                 </h3>
               </div>
             </div>
 
-            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3">
+            <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4">
               {courseDetailCards.map((course, index) => (
                 <motion.button
                   key={course.title}
@@ -351,17 +351,17 @@ export default function VulliInstitutePage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: index * 0.06 }}
                   onClick={() => setActiveCourse(course.title)}
-                  className="min-w-[110px] rounded-[1.25rem] border border-border bg-card p-3 text-center shadow-sm transition hover:-translate-y-1 hover:border-primary sm:min-w-[140px] sm:rounded-[1.5rem] sm:p-4"
+                  className="min-w-[132px] rounded-[1.5rem] border border-border bg-card p-4 text-center shadow-sm transition hover:-translate-y-1 hover:border-primary sm:min-w-[160px] sm:p-5"
                 >
                   <div className="flex flex-col items-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary sm:h-12 sm:w-12">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary sm:h-14 sm:w-14">
                       <CourseIcon icon={course.icon} />
                     </div>
-                    <h4 className="mt-3 text-xs font-bold sm:text-sm">{course.title}</h4>
-                    <p className="mt-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground sm:mt-2 sm:text-xs">
+                    <h4 className="mt-4 text-sm font-bold sm:text-base">{course.title}</h4>
+                    <p className="mt-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                       Tap to view
                     </p>
-                    <ChevronRight className="mt-2 h-3.5 w-3.5 text-muted-foreground sm:mt-3 sm:h-4 sm:w-4" />
+                    <ChevronRight className="mt-3 h-4 w-4 text-muted-foreground" />
                   </div>
                 </motion.button>
               ))}
@@ -369,9 +369,9 @@ export default function VulliInstitutePage() {
           </div>
         </section>
 
-        <section id="services" className="bg-slate-50 py-10 sm:py-16 lg:py-20">
+        <section id="services" className="bg-slate-50 py-12 sm:py-16 lg:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="grid gap-5 lg:grid-cols-[1fr_0.95fr] lg:gap-10">
+            <div className="grid gap-6 lg:grid-cols-[1fr_0.95fr] lg:gap-10">
               <div className="rounded-[2rem] bg-card p-5 shadow-sm sm:p-8">
                 <div className="flex items-center gap-3">
                   <div className="rounded-2xl bg-primary/10 p-3 text-primary">
