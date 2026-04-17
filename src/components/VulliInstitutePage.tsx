@@ -107,7 +107,7 @@ export default function VulliInstitutePage() {
       formData.append("_template", "table");
       formData.append("_captcha", "false");
 
-      const response = await fetch(`https://formsubmit.co/ajax/${instituteEmail}`, {
+      const response = await fetch("https://formsubmit.co/ajax/04c90c872e629ef45a0d41f4478a3dbe", {
         method: "POST",
         headers: {
           Accept: "application/json",
