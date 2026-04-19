@@ -141,18 +141,21 @@ function EnquiryForm({
           className="w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" />
       </label>
       <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row">
-        <button type="submit" disabled={submitState === "submitting"}
+        <motion.button type="submit" disabled={submitState === "submitting"}
+          whileHover={{ scale: submitState === "submitting" ? 1 : 1.02 }}
+          whileTap={{ scale: submitState === "submitting" ? 1 : 0.96 }}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 disabled:opacity-60">
           {submitState === "submitting" ? (
             <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />Sending…</>
           ) : (
             <><Send className="h-4 w-4" />Send Enquiry</>
           )}
-        </button>
-        <a href={whatsappLink} target="_blank" rel="noreferrer"
+        </motion.button>
+        <motion.a href={whatsappLink} target="_blank" rel="noreferrer"
+          whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.96 }}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-5 py-3 text-sm font-bold text-green-800 transition hover:bg-green-100">
           <MessageCircle className="h-4 w-4" /> WhatsApp
-        </a>
+        </motion.a>
       </div>
     </form>
   );
@@ -174,28 +177,46 @@ export default function VulliInstitutePage() {
   const activeCourseCard  = courseDetailCards.find((c) => c.title === activeCourse) ?? null;
   const activeCategoryData = courseGroups.find((g) => g.title === activeCategory);
 
-  const modalProps = "fixed inset-0 z-[60] flex items-end justify-center bg-slate-950/70 px-0 pb-0 sm:items-center sm:px-4 sm:py-8";
+  const backdropProps = {
+    initial: { opacity: 0, backdropFilter: "blur(0px)" },
+    animate: { opacity: 1, backdropFilter: "blur(6px)" },
+    exit:    { opacity: 0, backdropFilter: "blur(0px)" },
+    transition: { duration: 0.28, ease: "easeOut" },
+  };
+
+  const sheetSlide = {
+    initial:    { opacity: 0, y: 56, scale: 0.98 },
+    animate:    { opacity: 1, y: 0,  scale: 1    },
+    exit:       { opacity: 0, y: 48, scale: 0.98 },
+    transition: { type: "spring" as const, stiffness: 380, damping: 38, mass: 0.8 },
+  };
+
+  const modalProps = "fixed inset-0 z-[60] flex items-end justify-center px-0 pb-0 sm:items-center sm:px-4 sm:py-8";
   const sheetProps = "w-full max-h-[92dvh] overflow-y-auto rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl sm:p-8";
-  const springT = { type: "spring" as const, damping: 26, stiffness: 300 };
+  const springT = { type: "spring" as const, stiffness: 380, damping: 38, mass: 0.8 };
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
-      {/* Full-site animated favicon watermark background */}
+      {/* Full-site animated background image */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <motion.img
+          src="/favicon.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: 0.045, scale: 1 }}
+          transition={{ duration: 2.5, ease: "easeOut" }}
+        />
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-          className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 opacity-[0.028] sm:h-[900px] sm:w-[900px]"
-        >
-          <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
-        </motion.div>
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
-          className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 opacity-[0.018] sm:h-[550px] sm:w-[550px]"
-        >
-          <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
-        </motion.div>
+          className="absolute inset-0 h-full w-full object-cover"
+          animate={{ opacity: [0.045, 0.065, 0.045] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            backgroundImage: "url(/favicon.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
       </div>
 
       {/* HEADER */}
@@ -259,7 +280,7 @@ export default function VulliInstitutePage() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.28, ease: "easeInOut" }}
+              transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
               className="overflow-hidden border-t border-border/50 bg-white/98 backdrop-blur-md md:hidden"
             >
               <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
@@ -375,15 +396,7 @@ export default function VulliInstitutePage() {
                   <MessageCircle className="h-4 w-4" /> WhatsApp
                 </motion.a>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2 sm:mt-7">
-                {quickHighlights.map((h, i) => (
-                  <motion.span key={h} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + i * 0.08 }}
-                    className="rounded-xl border border-border bg-white/80 px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm sm:text-xs">
-                    {h}
-                  </motion.span>
-                ))}
-              </div>
+
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }} className="relative">
@@ -651,8 +664,10 @@ export default function VulliInstitutePage() {
                 const acc = categoryAccents[activeCategory] ?? categoryAccents["Courses Offered"];
                 return (
                   <motion.div key={activeCategory}
-                    initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28 }}
+                    initial={{ opacity: 0, y: 12, scale: 0.99 }}
+                    animate={{ opacity: 1, y: 0,  scale: 1    }}
+                    exit={{ opacity: 0, y: -8, scale: 0.99 }}
+                    transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
                     className={`mt-4 rounded-2xl border ${acc.border} ${acc.bg} p-5 sm:p-7`}>
                     <div className="mb-5 flex items-center gap-3">
                       <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${acc.icon}`}>
@@ -938,21 +953,22 @@ export default function VulliInstitutePage() {
       {/* ENROLL POPUP */}
       <AnimatePresence>
         {isEnrollOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className={modalProps} onClick={(e) => e.target === e.currentTarget && setIsEnrollOpen(false)}>
-            <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 60 }} transition={springT}
-              className={`${sheetProps} sm:max-w-2xl`}>
+          <motion.div {...backdropProps}
+            className={`${modalProps} bg-slate-950/60`}
+            onClick={(e) => e.target === e.currentTarget && setIsEnrollOpen(false)}>
+            <motion.div {...sheetSlide} className={`${sheetProps} sm:max-w-2xl`}>
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
                   <Eyebrow label="Enroll Now" />
                   <h3 className="mt-2 text-xl font-black sm:text-2xl">Admission enquiry</h3>
                   <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Fill in the details — we will call you shortly.</p>
                 </div>
-                <button type="button" onClick={() => setIsEnrollOpen(false)}
-                  className="rounded-full border border-border p-2 text-muted-foreground transition hover:bg-slate-100">
+                <motion.button type="button" onClick={() => setIsEnrollOpen(false)}
+                  whileHover={{ scale: 1.1, backgroundColor: "#f1f5f9" }}
+                  whileTap={{ scale: 0.92 }}
+                  className="rounded-full border border-border p-2 text-muted-foreground">
                   <X className="h-4 w-4" />
-                </button>
+                </motion.button>
               </div>
               <EnquiryForm submitState={popupSubmit} setSubmitState={setPopupSubmit}
                 onSuccess={() => setIsEnrollOpen(false)} whatsappLink={whatsappLink} email={instituteEmail} />
@@ -964,23 +980,26 @@ export default function VulliInstitutePage() {
       {/* PROFILE POPUP */}
       <AnimatePresence>
         {isProfileOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className={modalProps} onClick={(e) => e.target === e.currentTarget && setIsProfileOpen(false)}>
-            <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 60 }} transition={springT}
-              className={`${sheetProps} sm:max-w-xl`}>
+          <motion.div {...backdropProps}
+            className={`${modalProps} bg-slate-950/60`}
+            onClick={(e) => e.target === e.currentTarget && setIsProfileOpen(false)}>
+            <motion.div {...sheetSlide} className={`${sheetProps} sm:max-w-xl`}>
               <div className="mb-5 flex items-start justify-between gap-3">
                 <div>
                   <Eyebrow label="Our Profile" />
                   <h3 className="mt-2 text-lg font-black sm:text-xl">Vulli Narayana Institute</h3>
                 </div>
-                <button type="button" onClick={() => setIsProfileOpen(false)}
-                  className="rounded-full border border-border p-2 text-muted-foreground transition hover:bg-slate-100">
+                <motion.button type="button" onClick={() => setIsProfileOpen(false)}
+                  whileHover={{ scale: 1.1, backgroundColor: "#f1f5f9" }}
+                  whileTap={{ scale: 0.92 }}
+                  className="rounded-full border border-border p-2 text-muted-foreground">
                   <X className="h-4 w-4" />
-                </button>
+                </motion.button>
               </div>
               <div className="grid gap-5 sm:grid-cols-[auto_1fr] sm:items-start">
-                <img src="/ceo.jpg" alt="Vulli Narayana Institute"
+                <motion.img src="/ceo.jpg" alt="Vulli Narayana Institute"
+                  initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.12, duration: 0.4 }}
                   className="mx-auto h-36 w-36 rounded-2xl object-cover object-top sm:mx-0 sm:h-44 sm:w-44" />
                 <div>
                   <p className="text-sm leading-7 text-muted-foreground">
@@ -989,11 +1008,14 @@ export default function VulliInstitutePage() {
                     Intermediate and competitive examinations.
                   </p>
                   <div className="mt-4 grid gap-2">
-                    {instituteProfilePoints.map((point) => (
-                      <div key={point} className="flex items-start gap-2 rounded-xl border border-border bg-slate-50 px-3 py-2">
+                    {instituteProfilePoints.map((point, i) => (
+                      <motion.div key={point}
+                        initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.15 + i * 0.07 }}
+                        className="flex items-start gap-2 rounded-xl border border-border bg-slate-50 px-3 py-2">
                         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <span className="text-xs leading-5 text-muted-foreground">{point}</span>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -1011,35 +1033,40 @@ export default function VulliInstitutePage() {
       {/* LOCATION POPUP */}
       <AnimatePresence>
         {isLocationOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className={modalProps} onClick={(e) => e.target === e.currentTarget && setIsLocationOpen(false)}>
-            <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 60 }} transition={springT}
-              className={`${sheetProps} sm:max-w-md`}>
+          <motion.div {...backdropProps}
+            className={`${modalProps} bg-slate-950/60`}
+            onClick={(e) => e.target === e.currentTarget && setIsLocationOpen(false)}>
+            <motion.div {...sheetSlide} className={`${sheetProps} sm:max-w-md`}>
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
                   <Eyebrow label="Location" />
                   <h3 className="mt-2 text-xl font-black">Visit Our Institute</h3>
                 </div>
-                <button type="button" onClick={() => setIsLocationOpen(false)}
-                  className="rounded-full border border-border p-2 text-muted-foreground transition hover:bg-slate-100">
+                <motion.button type="button" onClick={() => setIsLocationOpen(false)}
+                  whileHover={{ scale: 1.1, backgroundColor: "#f1f5f9" }}
+                  whileTap={{ scale: 0.92 }}
+                  className="rounded-full border border-border p-2 text-muted-foreground">
                   <X className="h-4 w-4" />
-                </button>
+                </motion.button>
               </div>
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
                 <div className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
                   <p className="text-sm leading-7 text-amber-950">{instituteAddress}</p>
                 </div>
-              </div>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <a href={mapsLink} target="_blank" rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-bold text-white">Open in Maps</a>
-                <a href={`tel:${institutePhone}`}
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
+                className="mt-5 flex flex-wrap gap-3">
+                <motion.a href={mapsLink} target="_blank" rel="noreferrer"
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20">Open in Maps</motion.a>
+                <motion.a href={`tel:${institutePhone}`}
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }}
                   className="inline-flex items-center gap-2 rounded-2xl border border-border px-5 py-2.5 text-sm font-bold transition hover:border-primary hover:text-primary">
                   <Phone className="h-4 w-4" /> Call Institute
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
@@ -1048,47 +1075,60 @@ export default function VulliInstitutePage() {
       {/* COURSE DETAIL POPUP */}
       <AnimatePresence>
         {activeCourseCard && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className={modalProps} onClick={(e) => e.target === e.currentTarget && setActiveCourse(null)}>
-            <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 60 }} transition={springT}
-              className={`${sheetProps} sm:max-w-2xl`}>
+          <motion.div {...backdropProps}
+            className={`${modalProps} bg-slate-950/60`}
+            onClick={(e) => e.target === e.currentTarget && setActiveCourse(null)}>
+            <motion.div {...sheetSlide} className={`${sheetProps} sm:max-w-2xl`}>
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <motion.div
+                    initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1, type: "spring", stiffness: 400, damping: 22 }}
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <CourseIcon icon={activeCourseCard.icon} className="h-5 w-5" />
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.14 }}>
                     <Eyebrow label="Course Details" />
                     <h3 className="mt-1 text-xl font-black">{activeCourseCard.title}</h3>
-                  </div>
+                  </motion.div>
                 </div>
-                <button type="button" onClick={() => setActiveCourse(null)}
-                  className="rounded-full border border-border p-2 text-muted-foreground transition hover:bg-slate-100">
+                <motion.button type="button" onClick={() => setActiveCourse(null)}
+                  whileHover={{ scale: 1.1, backgroundColor: "#f1f5f9" }}
+                  whileTap={{ scale: 0.92 }}
+                  className="rounded-full border border-border p-2 text-muted-foreground">
                   <X className="h-4 w-4" />
-                </button>
+                </motion.button>
               </div>
-              <p className="text-sm leading-7 text-muted-foreground sm:text-[15px]">{activeCourseCard.overview}</p>
+              <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
+                className="text-sm leading-7 text-muted-foreground sm:text-[15px]">{activeCourseCard.overview}</motion.p>
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border bg-slate-50 p-5">
+                <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                  className="rounded-2xl border border-border bg-slate-50 p-5">
                   <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Course Structure</p>
                   <ul className="space-y-3">
-                    {activeCourseCard.structure.map((point) => (
-                      <li key={point} className="flex items-start gap-2.5 text-sm leading-6 text-muted-foreground">
+                    {activeCourseCard.structure.map((point, i) => (
+                      <motion.li key={point}
+                        initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.24 + i * 0.07 }}
+                        className="flex items-start gap-2.5 text-sm leading-6 text-muted-foreground">
                         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{point}
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
-                </div>
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+                  className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
                   <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-700">Syllabus Type</p>
                   <p className="text-sm leading-7 text-amber-950">{activeCourseCard.syllabus}</p>
-                </div>
+                </motion.div>
               </div>
-              <button type="button" onClick={() => { setActiveCourse(null); setIsEnrollOpen(true); }}
-                className="mt-6 w-full rounded-2xl bg-primary py-3 text-sm font-bold text-white transition hover:bg-primary/90">
+              <motion.button
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32 }}
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                type="button" onClick={() => { setActiveCourse(null); setIsEnrollOpen(true); }}
+                className="mt-6 w-full rounded-2xl bg-primary py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition">
                 Enroll in {activeCourseCard.title}
-              </button>
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
