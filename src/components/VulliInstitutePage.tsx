@@ -179,10 +179,27 @@ export default function VulliInstitutePage() {
   const springT = { type: "spring" as const, damping: 26, stiffness: 300 };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      {/* Full-site animated favicon watermark background */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+          className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 opacity-[0.028] sm:h-[900px] sm:w-[900px]"
+        >
+          <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
+        </motion.div>
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+          className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 opacity-[0.018] sm:h-[550px] sm:w-[550px]"
+        >
+          <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
+        </motion.div>
+      </div>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
+      <header className="relative z-40 sticky top-0 border-b border-border/60 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <a href="#" className="flex shrink-0 items-center gap-2.5">
@@ -322,7 +339,7 @@ export default function VulliInstitutePage() {
         </AnimatePresence>
       </header>
 
-      <main>
+      <main className="relative z-10">
 
         {/* HERO */}
         <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top_left,rgba(254,215,170,0.55),transparent_40%),linear-gradient(135deg,#fffbf5_0%,#fff_50%,#eff6ff_100%)]">
@@ -372,7 +389,7 @@ export default function VulliInstitutePage() {
               transition={{ duration: 0.7, delay: 0.2 }} className="relative">
               <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-amber-200/50 blur-2xl sm:h-36 sm:w-36" />
               <img src="/hero-section.jpg" alt="Students at Vulli Narayana Institute"
-                className="relative h-52 w-full rounded-3xl border border-white/60 object-cover shadow-2xl shadow-slate-200/80 sm:h-72 lg:h-[420px]" />
+                className="relative h-60 w-full rounded-3xl border border-white/60 object-cover object-center shadow-2xl shadow-slate-200/80 sm:h-80 lg:h-[460px]" />
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.65 }}
                 className="absolute -bottom-4 -left-3 rounded-2xl border border-white bg-white px-4 py-3 shadow-xl sm:-bottom-5 sm:-left-5">
@@ -383,18 +400,7 @@ export default function VulliInstitutePage() {
           </div>
         </section>
 
-        {/* TICKER */}
-        <div className="border-y border-slate-200 bg-slate-950 py-3">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 text-center sm:px-6">
-            {["Tirupati","IIT / NEET Foundation","Regular Tuitions","One-to-One Teaching","Spoken English","Summer Classes"].map((t, i) => (
-              <span key={t} className={`text-[11px] font-bold uppercase tracking-[0.18em] sm:text-xs ${i % 2 === 1 ? "text-amber-400" : "text-white/75"}`}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* TICKER */}
+        {/* TICKER — single instance */}
         <div className="border-y border-slate-200 bg-slate-950 py-3">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 text-center sm:px-6">
             {["Tirupati","IIT / NEET Foundation","Regular Tuitions","One-to-One Teaching","Spoken English","Summer Classes"].map((t, i) => (
@@ -858,7 +864,7 @@ export default function VulliInstitutePage() {
       </main>
 
       {/* FOOTER */}
-      <footer id="contact" className="bg-slate-950 text-white">
+      <footer id="contact" className="relative z-10 bg-slate-950 text-white">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
