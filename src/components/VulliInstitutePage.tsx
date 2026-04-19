@@ -5,7 +5,7 @@ import {
   ChevronRight, GraduationCap, Instagram, Landmark, Mail, MapPin,
   MessageCircle, NotebookText, Phone, Settings, Star, Trophy,
   UserRound, X, Youtube, Sparkles, Shield, Clock, Users,
-  Brain, Sun, Zap, Send,
+  Brain, Sun, Zap, Send, Menu, Quote, Award, CalendarDays,
 } from "lucide-react";
 import {
   courseGroups, instituteAddress, instituteEmail, institutePhone,
@@ -159,13 +159,14 @@ function EnquiryForm({
 }
 
 export default function VulliInstitutePage() {
-  const [isEnrollOpen, setIsEnrollOpen]     = useState(false);
-  const [isProfileOpen, setIsProfileOpen]   = useState(false);
-  const [isLocationOpen, setIsLocationOpen] = useState(false);
-  const [submitState, setSubmitState]       = useState<"idle"|"submitting"|"success">("idle");
-  const [popupSubmit, setPopupSubmit]       = useState<"idle"|"submitting"|"success">("idle");
-  const [activeCourse, setActiveCourse]     = useState<string|null>(null);
-  const [activeCategory, setActiveCategory] = useState(courseGroups[0].title);
+  const [isEnrollOpen, setIsEnrollOpen]       = useState(false);
+  const [isProfileOpen, setIsProfileOpen]     = useState(false);
+  const [isLocationOpen, setIsLocationOpen]   = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [submitState, setSubmitState]         = useState<"idle"|"submitting"|"success">("idle");
+  const [popupSubmit, setPopupSubmit]         = useState<"idle"|"submitting"|"success">("idle");
+  const [activeCourse, setActiveCourse]       = useState<string|null>(null);
+  const [activeCategory, setActiveCategory]   = useState(courseGroups[0].title);
 
   const whatsappLink = useMemo(() =>
     `https://wa.me/91${institutePhone}?text=${encodeURIComponent("Hello, I want to know more about admissions at Vulli Narayana Institute.")}`, []);
@@ -183,6 +184,7 @@ export default function VulliInstitutePage() {
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
+          {/* Logo */}
           <a href="#" className="flex shrink-0 items-center gap-2.5">
             <img src="/favicon.png" alt="Vulli Narayana Institute"
               className="h-8 w-8 rounded-lg border border-border object-cover sm:h-9 sm:w-9" />
@@ -191,16 +193,18 @@ export default function VulliInstitutePage() {
               <p className="hidden text-[10px] font-medium text-muted-foreground sm:block">Institute · Tirupati</p>
             </div>
           </a>
-          <div className="flex items-center gap-0.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+          {/* Desktop nav */}
+          <div className="hidden items-center gap-0.5 md:flex">
             {[["Courses","#courses"],["Services","#services"],["Admissions","#admissions"],["Contact","#contact"]].map(([l,h]) => (
-              <a key={l} href={h} className="whitespace-nowrap rounded-lg px-2 py-1.5 text-[11px] font-semibold text-muted-foreground transition hover:bg-slate-100 hover:text-primary sm:px-2.5 sm:text-xs">
+              <a key={l} href={h} className="whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold text-muted-foreground transition hover:bg-slate-100 hover:text-primary">
                 {l}
               </a>
             ))}
             <button type="button" onClick={() => setIsProfileOpen(true)}
               className="ml-1 flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-semibold transition hover:border-primary hover:text-primary sm:py-1.5">
               <img src="/ceo.jpg" alt="Profile" className="h-5 w-5 rounded-full object-cover" />
-              <span className="hidden sm:inline">Profile</span>
+              <span>Profile</span>
             </button>
             <button type="button" onClick={() => setIsLocationOpen(true)}
               className="ml-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-amber-200 bg-amber-50 text-amber-800 transition hover:bg-amber-100"
@@ -208,7 +212,114 @@ export default function VulliInstitutePage() {
               <MapPin className="h-3.5 w-3.5" />
             </button>
           </div>
+
+          {/* Mobile hamburger */}
+          <motion.button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-white text-foreground shadow-sm transition hover:bg-slate-50 md:hidden"
+            aria-label="Toggle menu"
+            whileTap={{ scale: 0.9 }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isMobileMenuOpen ? (
+                <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                  <X className="h-4.5 w-4.5 h-[18px] w-[18px]" />
+                </motion.span>
+              ) : (
+                <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                  <Menu className="h-[18px] w-[18px]" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
+
+        {/* Mobile drawer */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: "easeInOut" }}
+              className="overflow-hidden border-t border-border/50 bg-white/98 backdrop-blur-md md:hidden"
+            >
+              <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+                {/* Nav links */}
+                <nav className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: "Courses",    href: "#courses",    emoji: "📚" },
+                    { label: "Services",   href: "#services",   emoji: "⭐" },
+                    { label: "Admissions", href: "#admissions", emoji: "🎓" },
+                    { label: "Contact",    href: "#contact",    emoji: "📞" },
+                  ].map((link, i) => (
+                    <motion.a
+                      key={link.label}
+                      href={link.href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.06 }}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-3 rounded-2xl border border-border bg-slate-50 px-4 py-3.5 text-sm font-bold text-foreground transition hover:border-primary hover:bg-primary/5 hover:text-primary"
+                    >
+                      <span className="text-base">{link.emoji}</span>
+                      {link.label}
+                    </motion.a>
+                  ))}
+                </nav>
+
+                {/* Profile + Location row */}
+                <div className="mt-3 flex gap-2">
+                  <motion.button
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+                    type="button" onClick={() => { setIsProfileOpen(true); setIsMobileMenuOpen(false); }}
+                    className="flex flex-1 items-center gap-3 rounded-2xl border border-border bg-slate-50 px-4 py-3 text-sm font-bold text-foreground transition hover:border-primary hover:text-primary"
+                  >
+                    <img src="/ceo.jpg" alt="Profile" className="h-7 w-7 rounded-full object-cover" />
+                    Our Profile
+                  </motion.button>
+                  <motion.button
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                    type="button" onClick={() => { setIsLocationOpen(true); setIsMobileMenuOpen(false); }}
+                    className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800 transition hover:bg-amber-100"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Location
+                  </motion.button>
+                </div>
+
+                {/* Enroll CTA */}
+                <motion.button
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                  type="button" onClick={() => { setIsEnrollOpen(true); setIsMobileMenuOpen(false); }}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/20"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Enroll Now — Admissions Open 2026–27
+                </motion.button>
+
+                {/* Quick contact */}
+                <motion.div
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+                  className="mt-3 flex gap-2"
+                >
+                  <a href={`tel:${institutePhone}`}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 py-2.5 text-xs font-semibold text-foreground">
+                    <Phone className="h-3.5 w-3.5 text-primary" /> {institutePhone}
+                  </a>
+                  <a href={whatsappLink} target="_blank" rel="noreferrer"
+                    className="flex items-center gap-2 rounded-2xl border border-green-200 bg-green-50 px-4 py-2.5 text-xs font-semibold text-green-800">
+                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-[#25D366]" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    WhatsApp
+                  </a>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <main>
@@ -282,6 +393,214 @@ export default function VulliInstitutePage() {
             ))}
           </div>
         </div>
+
+        {/* TICKER */}
+        <div className="border-y border-slate-200 bg-slate-950 py-3">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 text-center sm:px-6">
+            {["Tirupati","IIT / NEET Foundation","Regular Tuitions","One-to-One Teaching","Spoken English","Summer Classes"].map((t, i) => (
+              <span key={t} className={`text-[11px] font-bold uppercase tracking-[0.18em] sm:text-xs ${i % 2 === 1 ? "text-amber-400" : "text-white/75"}`}>
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* STATS + FAVICON BACKGROUND */}
+        <section className="relative overflow-hidden bg-[linear-gradient(135deg,#172554_0%,#1e3a8a_60%,#0f172a_100%)] py-14 sm:py-20">
+          {/* Animated favicon watermark */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+              className="absolute h-[420px] w-[420px] opacity-[0.04] sm:h-[600px] sm:w-[600px]"
+            >
+              <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
+            </motion.div>
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="absolute h-[250px] w-[250px] opacity-[0.035] sm:h-[360px] sm:w-[360px]"
+            >
+              <img src="/favicon.png" alt="" className="h-full w-full rounded-full object-cover" />
+            </motion.div>
+            {/* Glowing ring */}
+            <motion.div
+              animate={{ scale: [1, 1.06, 1], opacity: [0.06, 0.12, 0.06] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute h-[320px] w-[320px] rounded-full border border-white/20 sm:h-[480px] sm:w-[480px]"
+            />
+          </div>
+
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+            <motion.div {...fadeUp()} className="mb-10 text-center">
+              <Eyebrow label="Why Students Trust Us" dark />
+              <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl lg:text-4xl">
+                Numbers that speak for themselves
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {[
+                { value: "12+", label: "Years of Excellence", icon: <CalendarDays className="h-5 w-5" /> },
+                { value: "2000+", label: "Students Guided", icon: <Users className="h-5 w-5" /> },
+                { value: "25+", label: "Expert Faculty", icon: <Award className="h-5 w-5" /> },
+                { value: "8+", label: "Courses Offered", icon: <BookOpen className="h-5 w-5" /> },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -4 }}
+                  className="flex flex-col items-center rounded-2xl border border-white/10 bg-white/8 p-5 text-center backdrop-blur-sm sm:p-7"
+                >
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300">
+                    {stat.icon}
+                  </div>
+                  <p className="text-3xl font-black text-white sm:text-4xl">{stat.value}</p>
+                  <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-white/60 sm:text-xs">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* TESTIMONIALS */}
+        <section className="bg-slate-50 py-12 sm:py-16 lg:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <motion.div {...fadeUp()} className="mb-8 sm:mb-12">
+              <Eyebrow label="Testimonials" />
+              <h2 className="mt-3 text-2xl font-black sm:text-3xl lg:text-4xl">
+                What students &amp; parents say
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground sm:text-[15px]">
+                Real experiences from the Vulli Narayana Institute family.
+              </p>
+            </motion.div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  name: "Priya Reddy",
+                  role: "NEET 2025 Aspirant",
+                  rating: 5,
+                  text: "The faculty here is exceptional. They break down complex Biology and Chemistry concepts so clearly. My confidence for NEET improved dramatically within just 3 months.",
+                  avatar: "PR",
+                  color: "bg-rose-100 text-rose-700",
+                },
+                {
+                  name: "Kiran Babu",
+                  role: "Parent · Class 10 Student",
+                  rating: 5,
+                  text: "My son's marks improved from 65% to 89% in a single semester. The one-to-one teaching and weekend tests kept him on track. We are very satisfied with the results.",
+                  avatar: "KB",
+                  color: "bg-blue-100 text-blue-700",
+                },
+                {
+                  name: "Sravani T.",
+                  role: "IIT-JEE Foundation, Class 9",
+                  rating: 5,
+                  text: "The Olympiad coaching here is world-class. Teachers actually care about each student. I won a bronze medal in the state science olympiad this year!",
+                  avatar: "ST",
+                  color: "bg-violet-100 text-violet-700",
+                },
+                {
+                  name: "Ramesh Naidu",
+                  role: "Parent · EAPCET Student",
+                  rating: 5,
+                  text: "Very professional institute. The AC classrooms, qualified faculty and regular feedback sessions make this far better than other coaching centres in Tirupati.",
+                  avatar: "RN",
+                  color: "bg-emerald-100 text-emerald-700",
+                },
+                {
+                  name: "Divya Lakshmi",
+                  role: "Intermediate MPC Student",
+                  rating: 5,
+                  text: "Spoken English classes changed my life. Now I can speak confidently in interviews. The teachers are patient and the environment is very positive and motivating.",
+                  avatar: "DL",
+                  color: "bg-amber-100 text-amber-700",
+                },
+                {
+                  name: "Venkat Rao",
+                  role: "Parent · Class 6 & 8 Students",
+                  rating: 5,
+                  text: "Both my children attend here. The foundation batches are excellent. Teachers give personal attention which is rare to find. Highly recommend to all Tirupati parents.",
+                  avatar: "VR",
+                  color: "bg-slate-100 text-slate-700",
+                },
+              ].map((t, i) => (
+                <motion.div
+                  key={t.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.45 }}
+                  whileHover={{ y: -4 }}
+                  className="flex flex-col gap-4 rounded-2xl border border-border bg-white p-5 shadow-sm transition"
+                >
+                  <Quote className="h-5 w-5 text-primary/30" />
+                  <p className="flex-1 text-sm leading-7 text-muted-foreground">{t.text}</p>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: t.rating }).map((_, si) => (
+                      <Star key={si} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-3 border-t border-border pt-4">
+                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-black ${t.color}`}>
+                      {t.avatar}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-foreground">{t.name}</p>
+                      <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Faculty strip */}
+            <motion.div {...fadeUp(0.1)} className="mt-10 sm:mt-14">
+              <div className="mb-6">
+                <Eyebrow label="Our Faculty" />
+                <h3 className="mt-2 text-xl font-black sm:text-2xl">Meet our dedicated teachers</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {[
+                  { name: "Sri Vulli Narayana", subject: "Director & Senior Faculty", exp: "12+ yrs", avatar: "/ceo.jpg", isPhoto: true },
+                  { name: "Maths Expert", subject: "Mathematics · IIT-JEE & EAPCET", exp: "8+ yrs", initials: "ME", color: "bg-blue-100 text-blue-700" },
+                  { name: "Science Faculty", subject: "Physics & Chemistry · NEET", exp: "7+ yrs", initials: "SF", color: "bg-violet-100 text-violet-700" },
+                  { name: "Biology Tutor", subject: "Biology · NEET & Class 10", exp: "6+ yrs", initials: "BT", color: "bg-emerald-100 text-emerald-700" },
+                  { name: "English Trainer", subject: "Spoken English & Grammar", exp: "5+ yrs", initials: "ET", color: "bg-rose-100 text-rose-700" },
+                  { name: "Foundation Lead", subject: "Class 1–8 All Subjects", exp: "9+ yrs", initials: "FL", color: "bg-amber-100 text-amber-700" },
+                  { name: "Olympiad Coach", subject: "NTSE & Olympiad Training", exp: "6+ yrs", initials: "OC", color: "bg-indigo-100 text-indigo-700" },
+                  { name: "Civils Mentor", subject: "Civils Foundation & Aptitude", exp: "5+ yrs", initials: "CM", color: "bg-slate-100 text-slate-700" },
+                ].map((f, i) => (
+                  <motion.div
+                    key={f.name}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.06 }}
+                    whileHover={{ y: -3 }}
+                    className="flex flex-col items-center rounded-2xl border border-border bg-white p-4 text-center shadow-sm"
+                  >
+                    {f.isPhoto ? (
+                      <img src={f.avatar} alt={f.name} className="h-14 w-14 rounded-2xl object-cover object-top shadow" />
+                    ) : (
+                      <div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-black ${(f as any).color}`}>
+                        {(f as any).initials}
+                      </div>
+                    )}
+                    <p className="mt-3 text-xs font-black text-foreground sm:text-sm">{f.name}</p>
+                    <p className="mt-0.5 text-[10px] leading-5 text-muted-foreground sm:text-xs">{f.subject}</p>
+                    <span className="mt-2 rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold text-primary">{f.exp}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
 
         {/* COURSES — redesigned */}
         <section id="courses" className="py-12 sm:py-16 lg:py-24">
@@ -597,10 +916,10 @@ export default function VulliInstitutePage() {
       <div className="fixed bottom-5 right-4 z-50 flex flex-col gap-2.5">
         <motion.a whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
           href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp"
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white shadow-xl shadow-green-500/30">
-          <svg viewBox="0 0 32 32" className="h-6 w-6 fill-current" aria-hidden="true">
-            <path d="M19.11 17.39c-.27-.13-1.61-.79-1.86-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.31-.79-.7-1.32-1.56-1.47-1.82-.16-.27-.02-.41.11-.54.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.47-.07-.13-.61-1.48-.84-2.03-.22-.53-.45-.46-.61-.47h-.52c-.18 0-.47.07-.72.34-.25.27-.95.93-.95 2.27 0 1.34.97 2.64 1.11 2.82.13.18 1.91 2.91 4.63 4.08.65.28 1.16.45 1.56.58.66.21 1.26.18 1.74.11.53-.08 1.61-.66 1.84-1.3.23-.64.23-1.19.16-1.3-.07-.11-.25-.18-.52-.31Z"/>
-            <path d="M16.03 3.2c-7.1 0-12.86 5.73-12.86 12.8 0 2.26.59 4.47 1.71 6.41L3 29l6.8-1.77a12.87 12.87 0 0 0 6.23 1.59h.01c7.09 0 12.86-5.73 12.86-12.8 0-3.42-1.34-6.63-3.79-9.05A12.8 12.8 0 0 0 16.03 3.2Zm0 23.46h-.01a10.7 10.7 0 0 1-5.45-1.49l-.39-.23-4.04 1.05 1.08-3.93-.25-.4a10.58 10.58 0 0 1-1.64-5.65c0-5.88 4.81-10.66 10.72-10.66 2.86 0 5.55 1.11 7.57 3.11a10.56 10.56 0 0 1 3.14 7.55c0 5.88-4.81 10.65-10.72 10.65Z"/>
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-green-500/40">
+          {/* Official WhatsApp icon */}
+          <svg viewBox="0 0 24 24" className="h-6 w-6 fill-white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
         </motion.a>
         <motion.a whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
